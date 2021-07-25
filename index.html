@@ -1,0 +1,155 @@
+<html> 
+<head> 
+	<meta charset="utf-8"> 
+<title>Задача №6</title> 
+<style>
+	#canvas{
+	background-color: #eee;
+	border: 1px solid #ccc;
+	}
+	form{
+		background-color: silver;
+		width: 800px;
+		padding: 10px 0;
+		margin: 20px;
+		border-radius: 5px;
+	}
+
+</style>
+</head> 
+	<body onload = "Scene()">
+	<div align = "center"> 
+	<canvas id ="canvas"></canvas>
+	<form name ="form">
+		x: <input type = "number" id ="X" size = 10>
+		y: <input type = "number" id ="Y" size = 10>
+		radius: <input type = "number" id ="R" size = 10>
+		<input type = "button" onclick = "Push()" value = "Готово"> 
+	</form> 
+	<script>
+
+		let x = 0;
+		let y = 0;
+		let radius = 0;
+		let canvas = document.getElementById("canvas");
+		canvas.width = 1000;
+		canvas.height = 500;
+		let x0 = canvas.width/2;
+		let y0 = canvas.height/2;
+		let context = canvas.getContext("2d");
+
+		function Scene() {
+			context.clearRect(0, 0, canvas.width, canvas.height);
+			context.beginPath();
+			context.moveTo(0,y0);
+			context.lineTo(x0*2,y0);
+			context.moveTo(x0,y0);
+			context.lineTo(x0,0);
+			context.moveTo(x0,y0);
+			context.lineTo(x0,y0*2);
+			context.stroke();
+			context.closePath();
+
+			Figure();
+		}
+		// (100, 100), (100, -100), (-100, 0)
+		function A(x1, y1){
+			var a = 200;
+			var b = Math.sqrt((x1 - 100) * (x1 - 100) + (y1 + 100) * (y1 + 100));
+			var c = Math.sqrt((x1 - 100) * (x1 - 100) + (y1 - 100) * (y1 - 100));
+
+			var p = (a + b + c)/2;
+
+			return Math.sqrt(Math.abs(p*(p - a)*(p - b)*(p - c)));
+		}
+
+		function B(x1, y1){
+			var a = Math.sqrt(50000);
+			var b = Math.sqrt((x1 + 100) * (x1 + 100) + (y1) * (y1));
+			var c = Math.sqrt((x1 - 100) * (x1 - 100) + (y1 + 100) * (y1 + 100));
+		
+			var p = (a + b + c)/2;
+
+			return Math.sqrt(Math.abs(p*(p - a)*(p - b)*(p - c)));
+		}
+
+		function C(x1, y1){
+			var a = Math.sqrt(50000);
+			var b = Math.sqrt((x1 + 100) * (x1 + 100) + (y1) * (y1));
+			var c = Math.sqrt((x1 - 100) * (x1 - 100) + (y1 - 100) * (y1 - 100));
+		
+			var p = (a + b + c)/2;
+
+			return Math.sqrt(Math.abs(p*(p - a)*(p - b)*(p - c)));
+		}
+
+		
+	
+
+		function Figure(x, y, radius){
+			//(100, 100), (100, -100), (-100, 0)
+			context.beginPath();
+			context.moveTo(x0+100,y0-100);
+			context.lineTo(x0+100,y0+100);
+			context.lineTo(x0-100,y0);
+			context.fillStyle = "yellow";
+			context.fill();
+
+			var xk = (Number (x) + x0);
+			var yk = (Number (-y) + y0);
+
+			context.beginPath();
+			context.arc(x0 - (-x), y0 - y, radius, 0, 2*Math.PI);
+			context.fillStyle = "white";
+			context.fill();
+			var t = '';
+			for(var x1 = -100; x1<=100; x1++){
+				for (var y1 = -100; y1<=200; y1++){
+					if (A(x1, y1) + B(x1, y1) + C(x1, y1) <= 20001){
+						if ((x0+x1 - xk)*(x0+x1 - xk) + (y0+y1 - yk)*(y0+y1 - yk) < radius*radius){
+							context.beginPath();
+							context.moveTo(x0+x1,y0+y1);
+							context.lineTo(x0+x1 + 0.5,y0+y1 + 0.5);
+							context.strokeStyle="red";
+							context.stroke();
+							t++;
+						} 
+					} 
+
+				}
+			}
+			Points(t);
+			context.closePath();
+		}
+
+		function Points(t){
+			context.beginPath();
+			context.font = "italic 20pt Arial";
+			context.fillStyle = "black";
+			context.fillText("Points: ", 10, 30);
+			context.fillText(t, 100, 30);
+			context.closePath();
+			context.beginPath();
+			context.strokeStyle = "black";
+			context.moveTo(0,y0);
+			context.lineTo(x0*2,y0);
+			context.moveTo(x0,y0);
+			context.lineTo(x0,0);
+			context.moveTo(x0,y0);
+			context.lineTo(x0,y0*2);
+			context.stroke();
+			context.closePath();
+
+		}
+
+		function Push(){
+			Scene();
+			x = document.getElementById("X").value;
+			y = document.getElementById("Y").value;
+			radius = document.getElementById("R").value;
+			Figure(x, y, radius);
+		}
+</script>
+</div> 
+</body> 
+</html>
